@@ -75,13 +75,21 @@ int main(int argc, char *argv[])
 
         fill(mat1, row, col);
         fill(mat2, row, col);
-        for (int i = 1; i < size; i++)
+        for (int i = 1; i < size; i+=r)
         {
+            for (int j = 0; j < r; j++)
+            {
+                
             MPI_Send(&mat1[i][0], col, MPI_INT, i, 17, MPI_COMM_WORLD);
             MPI_Send(&mat2[i][0], col, MPI_INT, i, 18, MPI_COMM_WORLD);
+            }
         }
-        for (int j = 0; j < col; j++)
-            mat3[0][j] = mat1[0][j] + mat2[0][j];
+        for (int j = 0; j < r; j++){
+            for (int i = 0; i < row; i++)
+            {   
+                mat3[j][i] = mat1[j][i] + mat2[j][i];
+            }
+        }
 
         for (int i = 1; i < size; i++)
         {
