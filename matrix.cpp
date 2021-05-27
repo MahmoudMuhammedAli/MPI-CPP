@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
             for (int i = 0; i < col; i++)
             {
                 m3[i] = m1[i] + m2[i];
-            }
+            
             MPI_Send(m3, col, MPI_INT, 0, 17, MPI_COMM_WORLD);
         }
     }
