@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     }
     inOutCredit >> row >> col;
 
-    int r =  (row*col)/size ; 
+    int r = (row) / size;
 
     if (rank == 0)
     {
@@ -72,21 +72,24 @@ int main(int argc, char *argv[])
         {
             mat3[i] = (int *)malloc(col * sizeof(int));
         }
-
+        int j;
         fill(mat1, row, col);
         fill(mat2, row, col);
-        for (int i = 1; i < size; i+=r)
+        for (int i = 1; i < size; i++)
         {
-            for (int j = 0; j < r; j++)
+            for (j = 0; j < r; j++)
             {
-                
-            MPI_Send(&mat1[i][0], col, MPI_INT, i, 17, MPI_COMM_WORLD);
-            MPI_Send(&mat2[i][0], col, MPI_INT, i, 18, MPI_COMM_WORLD);
+
+                MPI_Send(&mat1[j][0], col, MPI_INT, i, 17, MPI_COMM_WORLD);
+                MPI_Send(&mat2[j][0], col, MPI_INT, i, 18, MPI_COMM_WORLD);
             }
+            r += r;
+            j += r;
         }
-        for (int j = 0; j < r; j++){
+        for (int j = 0; j < r; j++)
+        {
             for (int i = 0; i < row; i++)
-            {   
+            {
                 mat3[j][i] = mat1[j][i] + mat2[j][i];
             }
         }
@@ -103,7 +106,7 @@ int main(int argc, char *argv[])
             {
                 std::cout << mat3[i][j] << " ";
             }
-        cout << std::endl;
+            cout << std::endl;
         }
     }
     else
@@ -126,17 +129,17 @@ int main(int argc, char *argv[])
         int *m1 = new int[col];
         int *m2 = new int[col];
         int *m3 = new int[col];
-
-        MPI_Recv(m1, col, MPI_INT, 0, 17, MPI_COMM_WORLD, &status);
-        MPI_Recv(m2, col, MPI_INT, 0, 18, MPI_COMM_WORLD, &status);
-        for (int i = 0; i < col; i++)
+        for (int i = 0; i < r; i++)
         {
-            m3[i] = m1[i] + m2[i];
+            MPI_Recv(m1, col, MPI_INT, 0, 17, MPI_COMM_WORLD, &status);
+            MPI_Recv(m2, col, MPI_INT, 0, 18, MPI_COMM_WORLD, &status);
+            for (int i = 0; i < col; i++)
+            {
+                m3[i] = m1[i] + m2[i];
+            }
+            MPI_Send(m3, col, MPI_INT, 0, 17, MPI_COMM_WORLD);
         }
-        MPI_Send(m3,col, MPI_INT, 0, 17, MPI_COMM_WORLD);
     }
+
     return 0;
 }
-
-
-
