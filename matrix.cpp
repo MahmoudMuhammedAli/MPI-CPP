@@ -117,11 +117,11 @@ int main(int argc, char *argv[])
         {
             mat3[i] = (int *)malloc(h * sizeof(int));
         }
-        MPI_Recv(mat1, w, MPI_INT, 0, 17, MPI_COMM_WORLD, &status);
-        MPI_Recv(mat2, w, MPI_INT, 0, 18, MPI_COMM_WORLD, &status);
+        MPI_Recv(mat1, 16, MPI_INT, 0, 17, MPI_COMM_WORLD, &status);
+        MPI_Recv(mat2, 16, MPI_INT, 0, 18, MPI_COMM_WORLD, &status);
         for (int i = 0; i < w; i++)
         {
-            mat3[0][i] = mat1[0][i] + mat2[0][i];
+            mat3[rank][i] = mat1[rank][i] + mat2[rank][i];
         }
         MPI_Send(mat3, w, MPI_INT, 0, 17, MPI_COMM_WORLD);
     }
