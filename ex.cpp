@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
         }
        // printf("total is %d", total);
 
-        for (int i = 1; i <= n - 1; i++)
+        for (int i = 1; i < n ; i++)
         {
             MPI_Recv(&accum, 1, MPI_INT, i, 17, MPI_COMM_WORLD, &status);
             total += accum;
