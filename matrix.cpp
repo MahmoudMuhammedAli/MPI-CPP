@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <cstdlib>
 #include <iostream>
@@ -129,15 +130,17 @@ int main(int argc, char *argv[])
         int *m1 = new int[col];
         int *m2 = new int[col];
         int *m3 = new int[col];
-
-        MPI_Recv(m1, col, MPI_INT, 0, 17, MPI_COMM_WORLD, &status);
-        MPI_Recv(m2, col, MPI_INT, 0, 18, MPI_COMM_WORLD, &status);
-        for (int i = 0; i < col; i++)
+        for (int i = 0; i < r; i++)
         {
-            m3[i] = m1[i] + m2[i];
-
+            MPI_Recv(m1, col, MPI_INT, 0, 17, MPI_COMM_WORLD, &status);
+            MPI_Recv(m2, col, MPI_INT, 0, 18, MPI_COMM_WORLD, &status);
+            for (int i = 0; i < col; i++)
+            {
+                m3[i] = m1[i] + m2[i];
+            
             MPI_Send(m3, col, MPI_INT, 0, 17, MPI_COMM_WORLD);
         }
     }
+
     return 0;
 }
